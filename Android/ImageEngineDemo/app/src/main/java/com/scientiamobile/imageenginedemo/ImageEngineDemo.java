@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+
+import okhttp3.OkHttpClient;
 
 public class ImageEngineDemo extends AppCompatActivity {
 
@@ -21,6 +24,7 @@ public class ImageEngineDemo extends AppCompatActivity {
     final static String DEFAULT_IMAGE_URL = "www.scientiamobile.com/page/wp-content/uploads/2017/02/HomePage-Demo-Woman-iPad-Redov3.png";
 
     ImageView v;
+    Picasso picasso;
 
 
     @Override
@@ -39,8 +43,15 @@ public class ImageEngineDemo extends AppCompatActivity {
 
         v = (ImageView) findViewById(R.id.imageView);
 
+
+        // You need the following two lines of code only if you want to override the default Android user agent with your custom version.
+        // If you don't need to override user-agent you can just use a plain and simple Picasso.with(getApplicationContext()).load(url) call to get your image
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new UserAgentInterceptor()).build();
+        picasso = new Picasso.Builder(this).downloader(new OkHttp3Downloader(client)).build();
+
         // We use plain ImageEngine call first, and let it detect the best size
-        Picasso.with(this).load(BASE_IMAGE_ENGINE_URL + "/https://"+ DEFAULT_IMAGE_URL).into(v);
+        picasso.load(BASE_IMAGE_ENGINE_URL + "/https://"+ DEFAULT_IMAGE_URL).into(v);
+
 
         // The use a text field to enter the dimension of an image we want to use.
         // The send button
@@ -69,7 +80,7 @@ public class ImageEngineDemo extends AppCompatActivity {
                 }
 
 
-                Picasso.with(getApplicationContext()).load(url).into(iv);
+                picasso.with(getApplicationContext()).load(url).into(iv);
             }
         });
 
