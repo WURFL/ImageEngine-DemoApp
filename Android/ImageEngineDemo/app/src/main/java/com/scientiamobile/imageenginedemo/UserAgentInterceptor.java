@@ -27,7 +27,7 @@ final class UserAgentInterceptor implements Interceptor {
 
     private String createCustomUserAgent(Request originalRequest) {
         // App name can be also retrieved programmatically, but no need to do it for this sample needs
-        String ua = "ImageEngineDemo";
+        String ua = "ImageEngineDemo/1.0";
         String baseUa = System.getProperty("http.agent");
         if(baseUa!=null){
             ua = ua + " " + baseUa;
